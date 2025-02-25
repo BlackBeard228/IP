@@ -100,6 +100,12 @@ let rec powComplex c n =
         // Применяем теорему Муавра: (r*e^(iphi))^n = r^n * e^(i*n*phi)
         { Re = rPow * cos (float n * phi); Im = rPow * sin (float n * phi) }
 
+let powComplexReal c (a: float) =
+    let r = sqrt(c.Re * c.Re + c.Im * c.Im)
+    let phi = atan2 c.Im c.Re
+    let rPow = Math.Pow(r, a)
+    { Re = rPow * cos (a * phi); Im = rPow * sin (a * phi) }
+
 // Vvod Complex
 let readComplex prompt =
     printfn "\n%s" prompt
@@ -115,6 +121,7 @@ let rec complexOperationsMenu () =
     printfn "3. Умножение"
     printfn "4. Деление"
     printfn "5. Возведение в степень"
+    printfn "6. Возведение в вещественную степень"
     printfn "0. Назад в главное меню"
     let choice = readInt "Введите номер операции: "
     match choice with
@@ -150,6 +157,12 @@ let rec complexOperationsMenu () =
         let n = readInt "Введите целую степень: "
         let res = powComplex c n
         printfn "Результат возведения в степень: %s" (vivComplex res)
+        complexOperationsMenu ()
+    | 6 ->
+        let c = readComplex "Введите комплексное число: " 
+        let n = readFloat "Введите вещественную степень: "
+        let res = powComplexReal c n
+        printfn "Результат возведения в нецелую степень: %s" (vivComplex res)
         complexOperationsMenu ()
     | 0 -> () // Возврат в главное меню
     | _ ->
