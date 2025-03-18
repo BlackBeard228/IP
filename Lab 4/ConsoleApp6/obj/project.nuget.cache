@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "ojpnII+OaxzdTO++NbbLLx8UVE/1+wRiCiBHBwiKO0KL+W8fQYWkphISnGK9XihjosL51w3dzbbIJgnj8VFGOg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\user\\source\\repos\\ConsoleApp6\\ConsoleApp6.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\fsharp.core\\7.0.400\\fsharp.core.7.0.400.nupkg.sha512"
+  ],
+  "logs": []
+}
