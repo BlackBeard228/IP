@@ -7,7 +7,7 @@ namespace Task2
         private byte hours;
         private byte minutes;
 
-        private byte Hours
+        public byte Hours
         {
             get => hours;
             set
