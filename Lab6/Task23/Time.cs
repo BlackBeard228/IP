@@ -7,13 +7,13 @@ namespace Task2
         private byte hours;
         private byte minutes;
 
-        public byte Hours
+        private byte Hours
         {
             get => hours;
             set
             {
                 if (value > 23)
-                    throw new ArgumentOutOfRangeException(nameof(value), "Часы должны быть в диапазоне от 0 до 23.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "Г—Г Г±Г» Г¤Г®Г«Г¦Г­Г» ГЎГ»ГІГј Гў Г¤ГЁГ ГЇГ Г§Г®Г­ГҐ Г®ГІ 0 Г¤Г® 23.");
                 hours = value;
             }
         }
@@ -24,41 +24,41 @@ namespace Task2
             set
             {
                 if (value > 59)
-                    throw new ArgumentOutOfRangeException(nameof(value), "Минуты должны быть в диапазоне от 0 до 59.");
+                    throw new ArgumentOutOfRangeException(nameof(value), "ГЊГЁГ­ГіГІГ» Г¤Г®Г«Г¦Г­Г» ГЎГ»ГІГј Гў Г¤ГЁГ ГЇГ Г§Г®Г­ГҐ Г®ГІ 0 Г¤Г® 59.");
                 minutes = value;
             }
         }
 
-        // Конструктор с параметрами
+        // ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° Г± ГЇГ Г°Г Г¬ГҐГІГ°Г Г¬ГЁ
         public Time(byte hours, byte minutes)
         {
             if (hours > 23)
-                throw new ArgumentOutOfRangeException(nameof(hours), "Часы должны быть в диапазоне от 0 до 23.");
+                throw new ArgumentOutOfRangeException(nameof(hours), "Г—Г Г±Г» Г¤Г®Г«Г¦Г­Г» ГЎГ»ГІГј Гў Г¤ГЁГ ГЇГ Г§Г®Г­ГҐ Г®ГІ 0 Г¤Г® 23.");
             if (minutes > 59)
-                throw new ArgumentOutOfRangeException(nameof(minutes), "Минуты должны быть в диапазоне от 0 до 59.");
+                throw new ArgumentOutOfRangeException(nameof(minutes), "ГЊГЁГ­ГіГІГ» Г¤Г®Г«Г¦Г­Г» ГЎГ»ГІГј Гў Г¤ГЁГ ГЇГ Г§Г®Г­ГҐ Г®ГІ 0 Г¤Г® 59.");
 
             this.hours = hours;
             this.minutes = minutes;
         }
 
-        // Конструктор копирования
+        // ГЉГ®Г­Г±ГІГ°ГіГЄГІГ®Г° ГЄГ®ГЇГЁГ°Г®ГўГ Г­ГЁГї
         public Time(Time other)
         {
             if (other == null)
-                throw new ArgumentNullException(nameof(other), "Невозможно скопировать объект, равный null.");
+                throw new ArgumentNullException(nameof(other), "ГЌГҐГўГ®Г§Г¬Г®Г¦Г­Г® Г±ГЄГ®ГЇГЁГ°Г®ГўГ ГІГј Г®ГЎГєГҐГЄГІ, Г°Г ГўГ­Г»Г© null.");
             hours = other.hours;
             minutes = other.minutes;
         }
 
-        // Переопределение метода ToString() для вывода времени в формате ЧЧ:ММ
+        // ГЏГҐГ°ГҐГ®ГЇГ°ГҐГ¤ГҐГ«ГҐГ­ГЁГҐ Г¬ГҐГІГ®Г¤Г  ToString() Г¤Г«Гї ГўГ»ГўГ®Г¤Г  ГўГ°ГҐГ¬ГҐГ­ГЁ Гў ГґГ®Г°Г¬Г ГІГҐ Г—Г—:ГЊГЊ
         public override string ToString()
         {
             return $"{hours:D2}:{minutes:D2}";
         }
 
         /// <summary>
-        /// Метод добавления произвольного количества минут (uint) к текущему объекту.
-        /// Результат рассчитывается по модулю 24 часа и возвращается новый объект Time.
+        /// ГЊГҐГІГ®Г¤ Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГї ГЇГ°Г®ГЁГ§ГўГ®Г«ГјГ­Г®ГЈГ® ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ  Г¬ГЁГ­ГіГІ (uint) ГЄ ГІГҐГЄГіГ№ГҐГ¬Гі Г®ГЎГєГҐГЄГІГі.
+        /// ГђГҐГ§ГіГ«ГјГІГ ГІ Г°Г Г±Г±Г·ГЁГІГ»ГўГ ГҐГІГ±Гї ГЇГ® Г¬Г®Г¤ГіГ«Гѕ 24 Г·Г Г±Г  ГЁ ГўГ®Г§ГўГ°Г Г№Г ГҐГІГ±Гї Г­Г®ГўГ»Г© Г®ГЎГєГҐГЄГІ Time.
         /// </summary>
         public Time AddMinutes(uint minutesToAdd)
         {
@@ -74,7 +74,7 @@ namespace Task2
         }
 
 
-        // Бинарный оператор +: Time + uint (добавление минут)
+        // ГЃГЁГ­Г Г°Г­Г»Г© Г®ГЇГҐГ°Г ГІГ®Г° +: Time + uint (Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Г¬ГЁГ­ГіГІ)
         public static Time operator +(Time t, uint minutesToAdd)
         {
             if (t == null)
@@ -82,13 +82,13 @@ namespace Task2
             return t.AddMinutes(minutesToAdd);
         }
 
-        // Бинарный оператор + в другой форме: uint + Time
+        // ГЃГЁГ­Г Г°Г­Г»Г© Г®ГЇГҐГ°Г ГІГ®Г° + Гў Г¤Г°ГіГЈГ®Г© ГґГ®Г°Г¬ГҐ: uint + Time
         public static Time operator +(uint minutesToAdd, Time t)
         {
             return t + minutesToAdd;
         }
 
-        // Бинарный оператор -: Time - uint (вычитание минут)
+        // ГЃГЁГ­Г Г°Г­Г»Г© Г®ГЇГҐГ°Г ГІГ®Г° -: Time - uint (ГўГ»Г·ГЁГІГ Г­ГЁГҐ Г¬ГЁГ­ГіГІ)
         public static Time operator -(Time t, uint minutesToSubtract)
         {
             if (t == null)
@@ -103,7 +103,7 @@ namespace Task2
             return new Time(newHours, newMinutes);
         }
 
-        // Унарный оператор ++: добавление одной минуты
+        // Г“Г­Г Г°Г­Г»Г© Г®ГЇГҐГ°Г ГІГ®Г° ++: Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Г®Г¤Г­Г®Г© Г¬ГЁГ­ГіГІГ»
         public static Time operator ++(Time t)
         {
             if (t == null)
@@ -111,7 +111,7 @@ namespace Task2
             return t + 1U;
         }
 
-        // Унарный оператор --: вычитание одной минуты
+        // Г“Г­Г Г°Г­Г»Г© Г®ГЇГҐГ°Г ГІГ®Г° --: ГўГ»Г·ГЁГІГ Г­ГЁГҐ Г®Г¤Г­Г®Г© Г¬ГЁГ­ГіГІГ»
         public static Time operator --(Time t)
         {
             if (t == null)
@@ -119,7 +119,7 @@ namespace Task2
             return t - 1U;
         }
 
-        // Явное приведение к типу byte – возвращает количество часов (минуты отбрасываются)
+        // ГџГўГ­Г®ГҐ ГЇГ°ГЁГўГҐГ¤ГҐГ­ГЁГҐ ГЄ ГІГЁГЇГі byte вЂ“ ГўГ®Г§ГўГ°Г Г№Г ГҐГІ ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® Г·Г Г±Г®Гў (Г¬ГЁГ­ГіГІГ» Г®ГІГЎГ°Г Г±Г»ГўГ ГѕГІГ±Гї)
         public static explicit operator byte(Time t)
         {
             if (t == null)
@@ -127,7 +127,7 @@ namespace Task2
             return t.hours;
         }
 
-        // Неявное приведение к типу bool – возвращает true, если и часы и минуты не равны нулю
+        // ГЌГҐГїГўГ­Г®ГҐ ГЇГ°ГЁГўГҐГ¤ГҐГ­ГЁГҐ ГЄ ГІГЁГЇГі bool вЂ“ ГўГ®Г§ГўГ°Г Г№Г ГҐГІ true, ГҐГ±Г«ГЁ ГЁ Г·Г Г±Г» ГЁ Г¬ГЁГ­ГіГІГ» Г­ГҐ Г°Г ГўГ­Г» Г­ГіГ«Гѕ
         public static implicit operator bool(Time t)
         {
             return t != null && (t.hours != 0 || t.minutes != 0);
