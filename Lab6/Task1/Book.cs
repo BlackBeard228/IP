@@ -10,8 +10,8 @@ namespace Task1
         /// Author – имя автора книги;
         /// Year – год издания книги.
         /// </summary>
-        public string Author { get; set; }
-        public int Year { get; set; }
+        private string Author { get; set; }
+        private int Year { get; set; }
 
         // Конструктор с параметрами
         public Book(string title, string author, int year)
