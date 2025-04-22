@@ -360,144 +360,173 @@ namespace TasksProject
         // Задание 5 – Бинарные файлы и структуры. Багаж пассажира с XML-сериализацией.
 
         public static void ExecuteTask5()
+    {
+        Console.WriteLine("Задание 5: Работа с данными о багаже пассажиров (XML-сериализация).");
+        string inputFileName = Validators.GetValidatedFileName("Введите имя входного файла для багажа (например, baggage.xml): ");
+        List<BaggageStruct> baggageList = new List<BaggageStruct>();
+
+        // Если файл отсутствует или данные некорректны – перегенерируем данные.
+        if (!File.Exists(inputFileName))
         {
-            Console.WriteLine("Задание 5: Работа с данными о багаже пассажиров (с использованием XML-сериализации).");
-            string inputFileName = Validators.GetValidatedFileName("Введите имя входного файла для багажа (например, baggage.xml): ");
-            List<BaggageStruct> baggageList = new List<BaggageStruct>();
-
-            if (!File.Exists(inputFileName))
-            {
-                Console.WriteLine($"Файл {inputFileName} не найден. Он будет создан.");
-                int count = Validators.GetValidatedInt("Введите количество записей (единиц багажа) для генерации: ");
-                baggageList = Task5_FillBaggageFile(inputFileName, count);
-            }
-            else
-            {
-                try
-                {
-                    baggageList = Task5_ReadBaggageFile(inputFileName);
-                    if (baggageList == null || baggageList.Count == 0)
-                    {
-                        Console.WriteLine("Файл существует, но не содержит корректных данных. Он будет перезаписан.");
-                        int count = Validators.GetValidatedInt("Введите количество записей для генерации: ");
-                        baggageList = Task5_FillBaggageFile(inputFileName, count);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Ошибка при чтении файла: " + ex.Message);
-                    int count = Validators.GetValidatedInt("Введите количество записей для генерации: ");
-                    baggageList = Task5_FillBaggageFile(inputFileName, count);
-                }
-            }
-
-            double totalMass = 0;
-            foreach (BaggageStruct bs in baggageList)
-                totalMass += bs.Mass;
-            double overallAverage = totalMass / baggageList.Count;
-            Console.WriteLine("Общая средняя масса единицы багажа: " + overallAverage + " кг");
-
-            Console.Write("Введите m (допустимое отклонение, в кг): ");
-            double m;
-            while (!double.TryParse(Console.ReadLine(), out m) || m < 0)
-                Console.Write("Некорректный ввод для m. Повторите ввод: ");
-
-            List<BaggageStruct> filteredList = new List<BaggageStruct>();
-            foreach (BaggageStruct bs in baggageList)
-            {
-                if (Math.Abs(bs.Mass - overallAverage) <= m)
-                    filteredList.Add(bs);
-            }
-
-            string outputFileName = Validators.GetValidatedFileName("Введите имя выходного файла (например, filtered_baggage.xml): ");
-            Task5_WriteBaggageFile(outputFileName, filteredList);
-            Console.WriteLine($"Отфильтрованные данные успешно записаны в файл {outputFileName}.");
+            Console.WriteLine($"Файл {inputFileName} не найден. Он будет создан.");
+            int numberOfPassengers = Validators.GetValidatedInt("Введите количество пассажиров: ");
+            baggageList = Task5_FillBaggageFile(inputFileName, numberOfPassengers);
         }
-
-        [Serializable]
-        public struct BaggageStruct
+        else
         {
-            private string _itemName;
-            private double _mass;
-
-            public BaggageStruct(string itemName, double mass)
+            try
             {
-                _itemName = itemName;
-                _mass = mass;
+                baggageList = Task5_ReadBaggageFile(inputFileName);
+                if (baggageList == null || baggageList.Count == 0)
+                {
+                    Console.WriteLine("Файл содержит некорректные данные. Он будет перезаписан.");
+                    int numberOfPassengers = Validators.GetValidatedInt("Введите количество пассажиров: ");
+                    baggageList = Task5_FillBaggageFile(inputFileName, numberOfPassengers);
+                }
             }
-
-            public string ItemName
+            catch (Exception ex)
             {
-                get { return _itemName; }
-                set { _itemName = value; }
-            }
-
-            public double Mass
-            {
-                get { return _mass; }
-                set { _mass = value; }
+                Console.WriteLine("Ошибка при чтении файла: " + ex.Message);
+                int numberOfPassengers = Validators.GetValidatedInt("Введите количество пассажиров: ");
+                baggageList = Task5_FillBaggageFile(inputFileName, numberOfPassengers);
             }
         }
 
-        private static List<BaggageStruct> Task5_FillBaggageFile(string fileName, int count)
+        if (baggageList.Count == 0)
         {
-            string[] types = { "чемодан", "сумка", "коробка", "рюкзак", "портфель" };
-            Random rnd = new Random();
-            List<BaggageStruct> list = new List<BaggageStruct>();
-            for (int i = 0; i < count; i++)
+            Console.WriteLine("Нет данных для обработки.");
+            return;
+        }
+
+        double totalMass = 0;
+        foreach (BaggageStruct b in baggageList)
+            totalMass += b.Mass;
+        double overallAverage = totalMass / baggageList.Count;
+        Console.WriteLine("Общая средняя масса единицы багажа: " + overallAverage + " кг");
+
+        Console.Write("Введите m (максимальное допустимое отклонение, кг): ");
+        double m;
+        while (!double.TryParse(Console.ReadLine(), out m) || m < 0)
+            Console.Write("Неверный ввод для m. Повторите ввод: ");
+
+        List<BaggageStruct> filteredList = new List<BaggageStruct>();
+        foreach (BaggageStruct b in baggageList)
+        {
+            if (Math.Abs(b.Mass - overallAverage) <= m)
+                filteredList.Add(b);
+        }
+
+        string outputFileName = Validators.GetValidatedFileName("Введите имя выходного файла для отфильтрованных данных (например, filtered_baggage.xml): ");
+        Task5_WriteBaggageFile(outputFileName, filteredList);
+        Console.WriteLine($"Отфильтрованные данные успешно записаны в {outputFileName}.");
+    }
+
+    [Serializable]
+    public struct BaggageStruct
+    {
+        private int _passengerId;
+        private string _itemName;
+        private double _mass;
+
+        public BaggageStruct(int passengerId, string itemName, double mass)
+        {
+            _passengerId = passengerId;
+            _itemName = itemName;
+            _mass = mass;
+        }
+
+        public int PassengerId
+        {
+            get { return _passengerId; }
+            set { _passengerId = value; }
+        }
+
+        public string ItemName
+        {
+            get { return _itemName; }
+            set { _itemName = value; }
+        }
+
+        public double Mass
+        {
+            get { return _mass; }
+            set { _mass = value; }
+        }
+
+        public override string ToString()
+        {
+            return $"Пассажир {PassengerId}: {ItemName} ({Mass} кг)";
+        }
+    }
+
+    // Генерация: запрашивается количество пассажиров, для каждого генерируется от 1 до 3 единиц багажа.
+    private static List<BaggageStruct> Task5_FillBaggageFile(string fileName, int numberOfPassengers)
+    {
+        string[] types = { "чемодан", "сумка", "коробка", "рюкзак", "портфель" };
+        Random rnd = new Random();
+        List<BaggageStruct> list = new List<BaggageStruct>();
+
+        for (int p = 1; p <= numberOfPassengers; p++)
+        {
+            // Генерируем от 1 до 3 единиц багажа для каждого пассажира.
+            int itemsCount = rnd.Next(1, 4);
+            for (int i = 0; i < itemsCount; i++)
             {
                 string type = types[rnd.Next(types.Length)];
-                double mass = Math.Round(5 + rnd.NextDouble() * 25, 2);
-                list.Add(new BaggageStruct(type, mass));
+                double mass = Math.Round(5 + rnd.NextDouble() * 25, 2); // масса от 5 до 30 кг
+                list.Add(new BaggageStruct(p, type, mass));
             }
-            try
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<BaggageStruct>));
-                using (FileStream fs = new FileStream(fileName, FileMode.Create))
-                {
-                    serializer.Serialize(fs, list);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ошибка при сериализации исходного файла: " + ex.Message);
-            }
-            return list;
         }
 
-        private static List<BaggageStruct> Task5_ReadBaggageFile(string fileName)
+        // Сериализация списка в XML.
+        try
         {
-            List<BaggageStruct> list = new List<BaggageStruct>();
-            try
+            XmlSerializer serializer = new XmlSerializer(typeof(List<BaggageStruct>));
+            using (FileStream fs = new FileStream(fileName, FileMode.Create))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<BaggageStruct>));
-                using (FileStream fs = new FileStream(fileName, FileMode.Open))
-                {
-                    list = (List<BaggageStruct>)serializer.Deserialize(fs);
-                }
+                serializer.Serialize(fs, list);
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ошибка при десериализации входного файла: " + ex.Message);
-            }
-            return list;
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при сериализации файла: " + ex.Message);
+        }
+        return list;
+    }
 
-        private static void Task5_WriteBaggageFile(string fileName, List<BaggageStruct> list)
+    private static List<BaggageStruct> Task5_ReadBaggageFile(string fileName)
+    {
+        List<BaggageStruct> list = new List<BaggageStruct>();
+        try
         {
-            try
+            XmlSerializer serializer = new XmlSerializer(typeof(List<BaggageStruct>));
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(List<BaggageStruct>));
-                using (FileStream fs = new FileStream(fileName, FileMode.Create))
-                {
-                    serializer.Serialize(fs, list);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ошибка при записи выходного файла: " + ex.Message);
+                list = (List<BaggageStruct>)serializer.Deserialize(fs);
             }
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при десериализации файла: " + ex.Message);
+        }
+        return list;
+    }
+
+    private static void Task5_WriteBaggageFile(string fileName, List<BaggageStruct> list)
+    {
+        try
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<BaggageStruct>));
+            using (FileStream fs = new FileStream(fileName, FileMode.Create))
+            {
+                serializer.Serialize(fs, list);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Ошибка при записи файла: " + ex.Message);
+        }
+    }
 
 
 
