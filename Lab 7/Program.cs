@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Threading.Tasks;
 
 namespace TasksProject
 {
@@ -9,34 +10,59 @@ namespace TasksProject
             bool exit = false;
             while (!exit)
             {
-                Console.Clear();
-                Console.WriteLine("Выберите номер задания для проверки (1-10):");
-                Console.WriteLine(" 1 - Задание 1 (Разность сумм: текстовый файл, одно число на строке)");
-                Console.WriteLine(" 2 - Задание 2 (Сумма чисел из текстового файла, несколько чисел в строке)");
-                Console.WriteLine(" 3 - Задание 3 (Копирование самой короткой и самой длинной строки из существующего текстового файла)");
-                Console.WriteLine(" 4 - Задание 4 (Бинарный файл: выбор чётных чисел)");
-                Console.WriteLine(" 5 - Задание 5 (Бинарный файл и XML-сериализация: обработка багажа пассажиров)");
-                Console.WriteLine(" 6 - Задание 6 (List: удаление всех вхождений элемента из списка)");
-                Console.WriteLine(" 7 - Задание 7 (LinkedList: вывод элементов в обратном порядке, ввод вручную)");
-                Console.WriteLine(" 8 - Задание 8 (HashSet: анализ закупок учебных заведений)");
-                Console.WriteLine(" 9 - Задание 9 (HashSet: вывод звонких согласных из уже созданного текстового файла)");
-                Console.WriteLine("10 - Задание 10 (Dictionary: генерация логинов учеников из файла)");
-                Console.WriteLine(" 0 - Выход");
-                Console.WriteLine();
+                Console.WriteLine("\nВыберите задание (1-10) или 0 для выхода:");
+                Console.WriteLine("1. Текстовый файл (разность сумм половин)");
+                Console.WriteLine("2. Текстовый файл (сумма элементов)");
+                Console.WriteLine("3. Текстовый файл (переписать самую короткую и самую длинную строки)");
+                Console.WriteLine("4. Бинарный файл (фильтрация четных чисел)");
+                Console.WriteLine("5. Бинарный файл с данными структур (багаж, XML-сериализация)");
+                Console.WriteLine("6. List – Удаление из списка всех элементов E");
+                Console.WriteLine("7. LinkedList<T> – Вывод в обратном порядке элементов");
+                Console.WriteLine("8. HashSet – Анализ закупок учебными заведениями");
+                Console.WriteLine("9. HashSet – Вывод звонких согласных в алфавитном порядке");
+                Console.WriteLine("10. Dictionary/SortedList – Формирование уникальных логинов учеников");
 
-                int choice = InputValidator.ReadValidInt("Ваш выбор: ", 0, 10);
-                Console.WriteLine();
-
-                if (choice == 0)
+                string choice = Console.ReadLine();
+                switch (choice)
                 {
-                    exit = true;
-                    break;
+                    case "0":
+                        exit = true;
+                        break;
+                    case "1":
+                        Tasks.ExecuteTask1();
+                        break;
+                    case "2":
+                        Tasks.ExecuteTask2();
+                        break;
+                    case "3":
+                        Tasks.ExecuteTask3();
+                        break;
+                    case "4":
+                        Tasks.ExecuteTask4();
+                        break;
+                    case "5":
+                        Tasks.ExecuteTask5();
+                        break;
+                    case "6":
+                        Tasks.ExecuteTask6();
+                        break;
+                    case "7":
+                        Tasks.ExecuteTask7();
+                        break;
+                    case "8":
+                        Tasks.ExecuteTask8();
+                        break;
+                    case "9":
+                        Tasks.ExecuteTask9();
+                        break;
+                    case "10":
+                        Tasks.ExecuteTask10();
+                        break;
+                    default:
+                        Console.WriteLine("Неверный выбор. Попробуйте снова.");
+                        break;
                 }
-
-                TaskSolver.RunTask(choice);
-
-                Console.WriteLine("\nНажмите любую клавишу для продолжения...");
-                Console.ReadKey();
+                Console.WriteLine();
             }
         }
     }
