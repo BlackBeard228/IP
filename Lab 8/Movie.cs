@@ -2,11 +2,14 @@ using System;
 
 namespace MovieCatalog
 {
-    /// <summary>Класс-модель фильма.</summary>
+    /// <summary>
+    /// РњРѕРґРµР»СЊ С„РёР»СЊРјР°. РЎРѕРґРµСЂР¶РёС‚ Р·Р°РєСЂС‹С‚С‹Рµ РїРѕР»СЏ Рё РѕС‚РєСЂС‹С‚С‹Рµ СЃРІРѕР№СЃС‚РІР°
+    /// СЃРѕ СЃС‚СЂРѕРіРѕР№ РїСЂРѕРІРµСЂРєРѕР№ Р·РЅР°С‡РµРЅРёР№ С‡РµСЂРµР· <see cref="Validator"/>.
+    /// </summary>
     [Serializable]
     public sealed class Movie
     {
-        
+        // private-РїРѕР»СЏ
         private int _id;
         private string _title = null!;
         private string _director = null!;
@@ -14,24 +17,13 @@ namespace MovieCatalog
         private int _year;
         private int _durationMin;
         private double _rating;
-
         
-        private static void EnsureWholeNumber(double number, string paramName)
-        {
-            if (number % 1 != 0)
-                throw new ArgumentException("Значение должно быть целым числом", paramName);
-        }
 
-        //свойства
+        // СЃРІРѕР№СЃС‚РІР°-Р°РєСЃРµСЃСЃРѕСЂС‹
         public int Id
         {
             get => _id;
-            private set
-            {
-                EnsureWholeNumber(value, nameof(Id));
-                if (value < 0) throw new ArgumentOutOfRangeException(nameof(Id), "Id не может быть отрицательным");
-                _id = value;
-            }
+            private set => _id = Validator.ValidateId(value);
         }
 
         public string Title
@@ -55,41 +47,27 @@ namespace MovieCatalog
         public int Year
         {
             get => _year;
-            set
-            {
-                EnsureWholeNumber(value, nameof(Year));
-                if (value < 0) throw new ArgumentOutOfRangeException(nameof(Year), "Год не может быть отрицательным");
-                _year = value;
-            }
+            set => _year = Validator.ValidateYear(value);
         }
 
         public int DurationMin
         {
             get => _durationMin;
-            set
-            {
-                EnsureWholeNumber(value, nameof(DurationMin));
-                if (value <= 0) throw new ArgumentOutOfRangeException(nameof(DurationMin), "Длительность должна быть > 0");
-                _durationMin = value;
-            }
+            set => _durationMin = Validator.ValidateDuration(value);
         }
 
         public double Rating
         {
             get => _rating;
-            set
-            {
-                if (value is < 0 or > 10)
-                    throw new ArgumentOutOfRangeException(nameof(Rating), "Рейтинг должен быть в диапазоне 0–10");
-                _rating = value;
-            }
+            set => _rating = Validator.ValidateRating(value);
         }
+        
 
-        //конструктор
+        /// <summary>РџРѕР»РЅС‹Р№ РєРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ С„РёР»СЊРјР°.</summary>
         public Movie(int id, string title, string director, string genre,
                      int year, int durationMin, double rating)
         {
-            Id = id;          
+            Id = id;
             Title = title;
             Director = director;
             Genre = genre;
@@ -98,7 +76,8 @@ namespace MovieCatalog
             Rating = rating;
         }
 
+        
         public override string ToString() =>
-            $"{Id,3} | {Title,-30} | {Director,-20} | {Genre,-12} | {Year,4} | {DurationMin,4} мин | {Rating,4:F1}";
+            $"{Id,3} | {Title,-30} | {Director,-20} | {Genre,-12} | {Year,4} | {DurationMin,4} РјРёРЅ | {Rating,4:F1}";
     }
 }
