@@ -1,9 +1,11 @@
-﻿using System;
+using System;
 using System.Globalization;
 using MovieCatalog;
+using MovieCatalogCli;
 
 namespace MovieCatalogCli
 {
+    /// <summary>Точка входа консольного каталога фильмов.</summary>
     internal static class Program
     {
         private static void Main()
@@ -11,11 +13,11 @@ namespace MovieCatalogCli
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             CultureInfo.CurrentCulture = new CultureInfo("ru-RU");
 
-            Console.Write("Введите имя бинарного файла (Enter = movies.bin): ");
-            var fileName = Console.ReadLine();
-            fileName = string.IsNullOrWhiteSpace(fileName) ? "movies.bin" : fileName.Trim();
+            Console.Write("Файл БД (Enter = movies.bin): ");
+            var file = Console.ReadLine();
+            file = string.IsNullOrWhiteSpace(file) ? "movies.bin" : file.Trim();
 
-            var repo = new MovieRepository(fileName);
+            var repo = new MovieRepository(file);
             repo.Load();
 
             while (true)
@@ -27,49 +29,19 @@ namespace MovieCatalogCli
                 Console.WriteLine("4. LINQ-запросы");
                 Console.WriteLine("0. Выход");
                 Console.Write("Ваш выбор: ");
-                var choice = Console.ReadLine();
 
-                try
+                switch (Console.ReadLine())
                 {
-                    switch (choice)
-                    {
-                        case "1": ShowAll(repo); break;
-                        case "2": AddMovie(repo); break;
-                        case "3": DeleteMovie(repo); break;
-                        case "4": Queries(repo); break;
-                        case "0": repo.Save(); return;
-                        default: Console.WriteLine("Неизвестный пункт меню."); break;
-                    }
+                    case "1": ShowAll(repo); break;
+                    case "2": AddMovie(repo); break;
+                    case "3": DeleteMovie(repo); break;
+                    case "4": Queries(repo); break;
+                    case "0": repo.Save(); return;
+                    default: Console.WriteLine("Неизвестный пункт меню."); break;
                 }
-                catch (Exception ex) { Console.WriteLine($"Ошибка: {ex.Message}"); }
             }
         }
 
-        // вспомогательные методы ввода 
-        private static int ReadInt(string prompt, int minValue)
-        {
-            while (true)
-            {
-                Console.Write(prompt);
-                if (int.TryParse(Console.ReadLine(), out int value) && value >= minValue)
-                    return value;
-                Console.WriteLine($"Введите целое число ≥ {minValue}!");
-            }
-        }
-
-        private static double ReadDouble(string prompt, double minValue, double maxValue)
-        {
-            while (true)
-            {
-                Console.Write(prompt);
-                if (double.TryParse(Console.ReadLine(), out double value) &&
-                    value >= minValue && value <= maxValue)
-                    return value;
-                Console.WriteLine($"Введите число в диапазоне {minValue}–{maxValue}!");
-            }
-        }
-
-        // пункты меню
         private static void ShowAll(MovieRepository repo)
         {
             Console.WriteLine("\nID | Название                       | Режиссёр            | Жанр         | Год | Мин | Рейтинг");
@@ -79,13 +51,13 @@ namespace MovieCatalogCli
 
         private static void AddMovie(MovieRepository repo)
         {
-            int id = ReadInt("Id: ", 0);
-            Console.Write("Название: "); string t = Console.ReadLine()!;
-            Console.Write("Режиссёр: "); string d = Console.ReadLine()!;
-            Console.Write("Жанр: "); string g = Console.ReadLine()!;
-            int year = ReadInt("Год: ", 0);
-            int duration = ReadInt("Длительность (мин): ", 1);
-            double rating = ReadDouble("Рейтинг (0–10): ", 0, 10);
+            int id = InputHelper.ReadInt("Id: ", 0);
+            Console.Write("Название: "); var t = Console.ReadLine()!;
+            Console.Write("Режиссёр: "); var d = Console.ReadLine()!;
+            Console.Write("Жанр: "); var g = Console.ReadLine()!;
+            int year = InputHelper.ReadInt("Год: ", 0);
+            int duration = InputHelper.ReadInt("Длительность (мин): ", 1);
+            double rating = InputHelper.ReadDouble("Рейтинг (0–10): ", 0, 10);
 
             var movie = new Movie(id, t, d, g, year, duration, rating);
             Console.WriteLine(repo.Add(movie) ? "Фильм добавлен." : "Такой Id уже существует!");
@@ -93,7 +65,7 @@ namespace MovieCatalogCli
 
         private static void DeleteMovie(MovieRepository repo)
         {
-            int id = ReadInt("Введите Id для удаления: ", 0);
+            int id = InputHelper.ReadInt("Введите Id для удаления: ", 0);
             Console.WriteLine(repo.Remove(id) ? "Фильм удалён." : "Фильм не найден.");
         }
 
@@ -105,9 +77,8 @@ namespace MovieCatalogCli
             Console.WriteLine("3. Средняя длительность всех фильмов");
             Console.WriteLine("4. Максимальный рейтинг");
             Console.Write("Ваш выбор: ");
-            var q = Console.ReadLine();
 
-            switch (q)
+            switch (Console.ReadLine())
             {
                 case "1":
                     Console.Write("Жанр: ");
@@ -115,7 +86,7 @@ namespace MovieCatalogCli
                     break;
 
                 case "2":
-                    double thr = ReadDouble("Порог рейтинга: ", 0, 10);
+                    double thr = InputHelper.ReadDouble("Порог рейтинга: ", 0, 10);
                     foreach (var m in repo.GetByRating(thr)) Console.WriteLine(m);
                     break;
 
