@@ -1,0 +1,41 @@
+﻿<Window x:Class="TimeWpfApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Time demo" Height="380" Width="380" ResizeMode="NoResize">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ввод -->
+        <GroupBox Header="Исходное время" Padding="8" Margin="0,0,0,8">
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Часы:"  Margin="0,0,4,0"/>
+                <TextBox x:Name="tbHours" Width="50" Margin="0,0,8,0"/>
+                <Label Content="Минуты:" Margin="0,0,4,0"/>
+                <TextBox x:Name="tbMinutes" Width="50" Margin="0,0,8,0"/>
+                <Button Content="Создать" Click="Create_Click"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- операции -->
+        <GroupBox Header="Операции" Grid.Row="1" Padding="8" Margin="0,0,0,8">
+            <UniformGrid Columns="2" Rows="4">
+                <Button Content="ToString" Click="Show_Click"/>
+                <Button Content="Копия"   Click="Copy_Click"/>
+                <Button Content="+ мин"   Click="Add_Click"/>
+                <Button Content="- мин"   Click="Sub_Click"/>
+                <Button Content="++"      Click="Inc_Click"/>
+                <Button Content="--"      Click="Dec_Click"/>
+                <Button Content="(byte)"  Click="CastByte_Click"/>
+                <Button Content="(bool)"  Click="CastBool_Click"/>
+            </UniformGrid>
+        </GroupBox>
+
+        <!-- журнал -->
+        <TextBlock x:Name="log" Grid.Row="2"
+                   FontFamily="Consolas" TextWrapping="Wrap"/>
+    </Grid>
+</Window>
